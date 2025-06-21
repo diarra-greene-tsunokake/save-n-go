@@ -1,0 +1,89 @@
+@import 'tailwindcss';
+
+
+.popup-grid {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: white;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.grid-btn {
+  padding: 10px;
+  background-color: #f3f3f3;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.grid-btn:hover {
+  background-color: #a4c98d;
+  color: white;
+}
+
+
+ .dates {
+display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    margin-top: 25px;
+    margin-right: 50px;
+     text-align: center;
+      align-items: center;
+}
+
+.days{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-top: 10px;
+    text-align: center;
+    align-items: center;
+}
+
+.date{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: auto;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 50%;
+    width: 37px;
+    height: 40px;
+    transition: 0.2s;
+}
+
+.date:hover,
+
+.date.active{
+    background: #a4c98d;
+    color:white;
+}
+
+.date.inactive{
+    color: #ccc;
+}
+
+.date.inactive:hover {
+    background: transparent;
+    color: #ccc;
+}
+
+.date.today {
+  border: 2px solid #a4c98d;
+  color: #a4c98d;
+  font-weight: bold;
+  background: transparent;
+}

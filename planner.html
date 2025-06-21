@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Planner</title>
+  </head>
+
+  <body class="text-[#26313E]">
+    <header class="bg-[#A4C98D] p-5 ">
+      <nav class="flex justify-between items-center">
+        <div class="flex items-start gap-5">
+     <img src="images/web-logo.png" alt="Website text logo" />
+        </div>
+<div class="">
+  <ul class="flex justify-end gap-[3vw] font-bold">
+    <li>
+    <a class="hover:text-green-100" href="index.html">Dashboard</a>
+    </li>
+    <li>
+    <a class="hover:text-green-100" href="planner.html">Planner</a>
+    </li>
+    <li>
+    <a class="hover:text-green-100" href="#">Journal</a>
+    </li>
+  </ul>
+</div>
+      </nav>
+  </header>
+<header class="w-48 h-screen">
+  <nav class="mt-10 flex flex-col gap-2">
+    <button class="rounded-full border border-gray-200 px-3 py-1 hover:bg-green-100">Username</button>
+    <button class="mt-3 rounded-full border border-gray-200 px-3 py-1  hover:bg-green-100">Another Username</button>
+  </nav>
+
+   <div class="bg-gray-100 ml-5 mt-10 p-8 w-80 auto-cols-auto rounded-4xl">
+    
+      <div class="flex justify-between items-center">
+        <button class="text-2xl text-purple-300 hover:text-purple-100" id="prevBtn">&larr;</button>
+        <button class="hover:text-purple-200 " id="monthYear">Feb</button>
+       <button class="text-2xl text-purple-300 hover:text-purple-100 flex justify-end gap-[3vw] mb-3" id="nextBtn">&rarr;</button>
+        </div>
+        <div class="days">
+          <div>Mon</div>
+          <div>Tue</div>
+          <div>Wed</div>
+          <div>Thu</div>
+          <div>Fri</div>
+          <div>Sat</div>
+          <div>Sun</div>
+        </div>  
+
+        <div class='dates' id="dates">
+          <!-- Days will be dynamically generated here -->
+      </div>
+    </div>
+
+</header>
+
+<header class="absolute top-28 left-95 h-screen">
+<div class="text-6xl ml-15 font-bold text-[#26313E]">
+Travel Board
+</div>
+<div style="width: 2px; height: 600px; background-color: rgb(164, 164, 164) ;"></div>
+</header>
+
+<!-- Clickable Add Plan Button that goes to newplanner.html -->
+<div class="absolute left-90 top-48">
+  <a href="newplanner.html">
+    <button class="rounded-xl bg-[#A4C98D] px-4 py-3 hover:bg-green-100 ml-20">
+      + Add Plan
+    </button>
+  </a>
+</div>
+
+
+<!-- ✅ Plan Cards Section goes here -->
+<div id="plannerEntries" class="ml-80 mt-40 grid grid-cols-1 md:grid-cols-2 gap-6 pr-10">
+  <!-- Cards will be inserted here by JS -->
+</div>
+
+<!-- Scripts -->
+<script type="module" src="/src/main.js"></script>
+<script src="/src/load-planner.js" defer></script>
+</body>
+
+
+
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+
