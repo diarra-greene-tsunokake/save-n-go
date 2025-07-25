@@ -29,21 +29,22 @@ const updateCalendar = () => {
 
   for (let i = firstDayOfWeek - 1; i > 0; i--) {
     const prevDate = new Date(currentYear, currentMonth, -i + 1);
-    datesHTML += `<div class="date inactive">${prevDate.getDate()}</div>`;
+    datesHTML += `<div class="date inactive text-center">${prevDate.getDate()}</div>`;
   }
 
   for (let i = 1; i <= totalDays; i++) {
     const date = new Date(currentYear, currentMonth, i);
     const isToday = date.toDateString() === new Date().toDateString();
     const todayClass = isToday ? 'today' : '';
-    datesHTML += `<div class="date ${todayClass}">${i}</div>`;
+    datesHTML += `<div class="date ${todayClass} text-center">${i}</div>`;
   }
 
   const visibleCount = (datesHTML.match(/<div class="date/g) || []).length;
   const remainingDays = 42 - visibleCount;
   for (let i = 1; i <= remainingDays; i++) {
     const nextDate = new Date(currentYear, currentMonth + 1, i);
-    datesHTML += `<div class="date inactive">${nextDate.getDate()}</div>`;
+    datesHTML += `<div class="date inactive text-center">${nextDate.getDate()}</div>`;
+
   }
 
   datesElement.innerHTML = datesHTML;

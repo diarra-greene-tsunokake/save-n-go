@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-
 .popup-grid {
   position: absolute;
   display: grid;
@@ -32,53 +31,50 @@
   color: white;
 }
 
-
- .dates {
-display: grid;
-    grid-template-columns: repeat(7, 1fr);
-
-    margin-top: 25px;
-    margin-right: 50px;
-     text-align: center;
-      align-items: center;
+.dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 25px;
+  margin-right: 50px;
+  text-align: center;
+  align-items: center;
 }
 
-.days{
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    margin-top: 10px;
-    text-align: center;
-    align-items: center;
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 10px;
+  text-align: center;
+  align-items: center;
 }
 
-.date{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    margin: auto;
-    cursor: pointer;
-    font-weight: 600;
-    border-radius: 50%;
-    width: 37px;
-    height: 40px;
-    transition: 0.2s;
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin: auto;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 50%;
+  width: 37px;
+  height: 40px;
+  transition: 0.2s;
 }
 
 .date:hover,
-
-.date.active{
-    background: #a4c98d;
-    color:white;
+.date.active {
+  background: #a4c98d;
+  color: white;
 }
 
-.date.inactive{
-    color: #ccc;
+.date.inactive {
+  color: #ccc;
 }
 
 .date.inactive:hover {
-    background: transparent;
-    color: #ccc;
+  background: transparent;
+  color: #ccc;
 }
 
 .date.today {
@@ -86,4 +82,109 @@ display: grid;
   color: #a4c98d;
   font-weight: bold;
   background: transparent;
+}
+
+/* Mobile Responsive Layout */
+@media (max-width: 600px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Left sidebar - move to top and make horizontal */
+  header:nth-of-type(2) {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 20px;
+    order: 1;
+  }
+
+  header:nth-of-type(2) nav {
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 0 !important;
+  }
+
+  /* Calendar - keep in sidebar but adjust styling */
+  header:nth-of-type(2) > div {
+    margin: 20px auto 0 auto !important;
+    width: 90% !important;
+    max-width: 320px;
+    padding: 20px !important;
+  }
+
+  .dates {
+    margin-right: 0 !important;
+  }
+
+  /* Travel Board header - move below calendar */
+  header:nth-of-type(3) {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    height: auto !important;
+    text-align: center;
+    padding: 20px;
+    order: 2;
+  }
+
+  header:nth-of-type(3) > div:first-child {
+    font-size: 2.5rem !important;
+    margin-left: 0 !important;
+    margin-bottom: 20px;
+  }
+
+  /* Hide the vertical line on mobile */
+  .line {
+    display: none !important;
+  }
+
+  /* Add Plan button and cards section */
+  div[class*="absolute"] {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    padding: 0 20px;
+    order: 3;
+  }
+
+  div[class*="absolute"] button {
+    margin-left: 0 !important;
+    display: block;
+    margin: 0 auto 30px auto;
+  }
+
+  #plannerEntries {
+    margin-left: 0 !important;
+    padding-right: 0 !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Create flex container for proper ordering */
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Popup grid mobile adjustment */
+  .popup-grid {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    max-height: none;
+    padding: 8px;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+    z-index: 1000;
+    background: white;
+  }
+
+  .grid-btn {
+    padding: 10px;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
 }

@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.dataset.page === "dashboard";
 
   // Show only 2 entries on dashboard, all entries on planner
-  const entriesToRender = isDashboard ? entries.slice(0, 2) : entries;
+  const entriesToRender = isDashboard ? entries.slice(0, 4) : entries;
 
   // Clear container before rendering
   container.innerHTML = "";
