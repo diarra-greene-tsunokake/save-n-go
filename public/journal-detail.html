@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Trip - Travel Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="text-[#26313E] bg-gray-50 min-h-screen">
+    <!-- Top Navigation -->
+    <header class="bg-[#A4C98D] p-5">
+      <nav class="flex justify-between items-center">
+        <div class="flex items-start gap-5">
+          <img src="images/web-logo.png" alt="Website text logo" />
+        </div>
+        <ul class="flex gap-[3vw] font-bold">
+          <li><a class="hover:text-green-100" href="index.html">Dashboard</a></li>
+          <li><a class="hover:text-green-100" href="planner.html">Planner</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <main class="flex flex-col md:flex-row gap-6 p-6">
+      <!-- Sidebar Calendar -->
+      <aside class="w-full md:w-1/4">
+        <div class="flex flex-col items-start gap-4">
+          <button class="rounded-full border border-gray-200 px-3 py-1 hover:bg-green-100">Username</button>
+          <button class="rounded-full border border-gray-200 px-3 py-1 hover:bg-green-100">Another Username</button>
+        </div>
+
+        <div class="bg-gray-100 mt-10 p-5 rounded-xl w-full">
+          <div class="flex justify-between items-center mb-2">
+            <button class="text-2xl text-purple-300 hover:text-purple-100" id="prevBtn">&larr;</button>
+            <button class="hover:text-purple-200 font-semibold" id="monthYear">Feb</button>
+            <button class="text-2xl text-purple-300 hover:text-purple-100" id="nextBtn">&rarr;</button>
+          </div>
+
+          <div class="days grid grid-cols-7 text-center font-semibold text-gray-600 mb-2">
+            <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+          </div>
+
+          <div class="dates grid grid-cols-7 gap-1" id="dates"></div>
+        </div>
+      </aside>
+
+      <!-- Journal + Budget -->
+      <section class="w-full md:w-3/4 flex flex-col gap-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-4xl font-bold text-[#26313E]">Edit Your Trip</h2>
+          <a href="planner.html" class="text-blue-600 underline hover:text-blue-800">&larr; Back to Planner</a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Journal Form -->
+          <div class="bg-white p-5 rounded-xl shadow-md">
+            <form id="journalForm" enctype="multipart/form-data">
+              <label for="selectedDate" class="block mb-2 font-semibold">Selected Date:</label>
+              <input type="text" id="selectedDate" name="selectedDate" class="w-full mb-4 p-2 border rounded" readonly />
+
+              <label for="destination" class="block mb-2 font-semibold">Destination:</label>
+              <input type="text" id="destination" name="destination" class="w-full mb-4 p-2 border rounded" placeholder="e.g. Tokyo" />
+
+              <label for="notes" class="block mb-2 font-semibold">Notes:</label>
+              <textarea id="notes" name="notes" class="w-full mb-4 p-2 border rounded" placeholder="Write your travel notes..."></textarea>
+
+              <label for="headerPhoto" class="block mb-2 font-semibold">Header Photo:</label>
+              <input type="file" id="headerPhoto" name="headerPhoto" accept="image/*" class="mb-4" />
+
+              <div id="photoPreview" class="mb-4"></div>
+
+              <button type="submit" class="w-500 bg-[#A4C98D] hover:bg-green-100 text-white py-2 px-4 rounded">Update Trip</button>
+              <button id="deleteBtn" class="px-5 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Delete</button>
+            </form>
+          </div>
+
+          <!-- Budget Table -->
+          <div class="bg-white p-5 rounded-xl shadow-md">
+            <fieldset class="mb-6">
+              <legend class="text-lg font-semibold mb-4">Budget Planner</legend>
+              <table id="budgetTable" class="w-full border-collapse border border-gray-300 text-sm">
+                <thead>
+                  <tr class="bg-gray-200">
+                    <th class="border px-4 py-2 text-left">Expense</th>
+                    <th class="border px-4 py-2 text-left">Amount (USD)</th>
+                    <th class="border px-4 py-2 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Expense rows will be inserted here -->
+                </tbody>
+              </table>
+            </fieldset>
+            <!-- Add Expense Form -->
+            <div class="flex gap-2">
+              <input type="text" id="expenseName" placeholder="Expense" class="border p-2 rounded w-1/2" />
+              <input type="number" id="expenseAmount" placeholder="Amount" class="border p-2 rounded w-1/3" />
+              <button type="button" id="addExpenseBtn" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600">Add</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const entryId = urlParams.get('id');
+        
+        if (!entryId) {
+          alert('No entry ID provided');
+          window.location.href = 'planner.html';
+          return;
+        }
+
+        const entries = JSON.parse(localStorage.getItem("travelEntries")) || [];
+        const entry = entries.find(e => e.id === entryId);
+        
+        if (!entry) {
+          alert('Entry not found');
+          window.location.href = 'planner.html';
+          return;
+        }
+
+        const datesContainer = document.getElementById("dates");
+        const monthYear = document.getElementById("monthYear");
+        const selectedDateInput = document.getElementById("selectedDate");
+        const destinationInput = document.getElementById("destination");
+        const notesInput = document.getElementById("notes");
+        const headerPhotoInput = document.getElementById("headerPhoto");
+        const photoPreview = document.getElementById("photoPreview");
+        const form = document.getElementById("journalForm");
+        const budgetTableBody = document.querySelector("#budgetTable tbody");
+        const addExpenseBtn = document.getElementById("addExpenseBtn");
+        const expenseNameInput = document.getElementById("expenseName");
+        const expenseAmountInput = document.getElementById("expenseAmount");
+
+        selectedDateInput.value = entry.date;
+        destinationInput.value = entry.destination;
+        notesInput.value = entry.notes || '';
+
+        if (entry.headerPhoto) {
+          photoPreview.innerHTML = `<img src="${entry.headerPhoto}" alt="Current photo" class="w-full rounded-md max-h-40 object-cover" />`;
+        }
+
+        if (entry.budget && Array.isArray(entry.budget)) {
+          entry.budget.forEach(expense => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="border px-4 py-2">${expense.name}</td>
+              <td class="border px-4 py-2">$${parseFloat(expense.amount).toFixed(2)}</td>
+              <td class="border px-4 py-2">
+                <button type="button" class="text-red-500 hover:text-red-700 removeBtn">Remove</button>
+              </td>
+            `;
+            budgetTableBody.appendChild(row);
+            row.querySelector(".removeBtn").addEventListener("click", () => row.remove());
+          });
+        }
+
+        let currentDate = new Date();
+
+        function renderCalendar() {
+          const year = currentDate.getFullYear();
+          const month = currentDate.getMonth();
+          monthYear.textContent = currentDate.toLocaleString("default", {
+            month: "long",
+            year: "numeric",
+          });
+
+          const firstDay = new Date(year, month, 1).getDay();
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+          datesContainer.innerHTML = "";
+
+          const offset = firstDay === 0 ? 7 : firstDay;
+          for (let i = 1; i < offset; i++) {
+            const empty = document.createElement("div");
+            datesContainer.appendChild(empty);
+          }
+
+          for (let day = 1; day <= daysInMonth; day++) {
+            const dayDiv = document.createElement("div");
+            dayDiv.className = "cursor-pointer p-2 hover:bg-green-100 text-center rounded";
+            dayDiv.textContent = day;
+
+            dayDiv.addEventListener("click", () => {
+              const selected = new Date(year, month, day);
+              selectedDateInput.value = selected.toISOString().split("T")[0];
+            });
+
+            datesContainer.appendChild(dayDiv);
+          }
+        }
+
+        document.getElementById("prevBtn").addEventListener("click", () => {
+          currentDate.setMonth(currentDate.getMonth() - 1);
+          renderCalendar();
+        });
+
+        document.getElementById("nextBtn").addEventListener("click", () => {
+          currentDate.setMonth(currentDate.getMonth() + 1);
+          renderCalendar();
+        });
+
+        renderCalendar();
+
+        headerPhotoInput.addEventListener("change", () => {
+          const file = headerPhotoInput.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              photoPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-full rounded-md max-h-40 object-cover" />`;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        addExpenseBtn.addEventListener("click", () => {
+          const name = expenseNameInput.value.trim();
+          const amount = parseFloat(expenseAmountInput.value.trim());
+
+          if (!name || isNaN(amount)) {
+            alert("Please enter a valid expense name and amount");
+            return;
+          }
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="border px-4 py-2">${name}</td>
+            <td class="border px-4 py-2">$${amount.toFixed(2)}</td>
+            <td class="border px-4 py-2">
+              <button type="button" class="text-red-500 hover:text-red-700 removeBtn">Remove</button>
+            </td>
+          `;
+
+          budgetTableBody.appendChild(row);
+          row.querySelector(".removeBtn").addEventListener("click", () => row.remove());
+
+          expenseNameInput.value = "";
+          expenseAmountInput.value = "";
+        });
+
+        // ✅ FORM SUBMIT - Update
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const date = selectedDateInput.value;
+          const destination = destinationInput.value.trim();
+          const notes = notesInput.value.trim();
+          const file = headerPhotoInput.files[0];
+
+          if (!date || !destination) {
+            alert("Please select a date and enter a destination");
+            return;
+          }
+
+          const budgetRows = Array.from(budgetTableBody.querySelectorAll("tr"));
+          const budget = budgetRows.map(row => {
+            const expenseName = row.children[0].textContent.trim();
+            const amountText = row.children[1].textContent.trim();
+            const amount = parseFloat(amountText.replace("$", ""));
+            return { name: expenseName, amount };
+          });
+
+          function updateEntry(base64Image) {
+            const updatedEntry = {
+              ...entry,
+              date,
+              destination,
+              notes,
+              headerPhoto: base64Image || entry.headerPhoto,
+              budget,
+            };
+
+            const updatedEntries = entries.map(e => e.id === entryId ? updatedEntry : e);
+            localStorage.setItem("travelEntries", JSON.stringify(updatedEntries));
+
+            alert("✅ Your trip has been updated!");
+            window.location.href = `journal-detail.html?id=${entryId}`;
+          }
+
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => updateEntry(event.target.result);
+            reader.readAsDataURL(file);
+          } else {
+            updateEntry(null);
+          }
+        });
+
+        // ✅ DELETE BUTTON - Working version
+        const deleteBtn = document.getElementById("deleteBtn");
+        deleteBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          const confirmDelete = confirm("Are you sure you want to delete this trip?");
+          if (!confirmDelete) return;
+
+          const updatedEntries = entries.filter(e => e.id !== entryId);
+          localStorage.setItem("travelEntries", JSON.stringify(updatedEntries));
+
+          alert("🗑️ Trip deleted.");
+          window.location.href = 'planner.html';
+        });
+      });
+    </script>
+  </body>
+</html>
